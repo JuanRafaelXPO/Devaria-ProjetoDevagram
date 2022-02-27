@@ -32,7 +32,7 @@ export const validarTokenJWT = (handler : NextApiHandler) =>
             }
 
             if(!req.query){
-                req.query = {}
+                req.query = {};
             }
 
             req.query.userId = decoded._id;
