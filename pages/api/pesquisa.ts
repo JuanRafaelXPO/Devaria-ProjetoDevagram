@@ -25,10 +25,12 @@ const pesquisaEndpoint
                     $or: [{nome : {$regex : filtro, $options: 'i'}},
                         {email : {$regex : filtro, $options: 'i'}}]
                 });
+
+                usuariosEncontrados.forEach(e => e.senha= null);
                 return res.status(200).json(usuariosEncontrados);
             }
-            return res.status(405).json({erro : 'Método informado não é válido'})
         }
+        return res.status(405).json({erro : 'Método informado não é válido'})
     }catch(e){
         console.log(e);
         return res.status(500).json({erro : 'Não foi possível buscar usuários: ' + e})
