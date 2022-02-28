@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { conectarMongoDB } from "../../middlewares/conectarMongoDB";
-import { SeguidorModel } from "../../middlewares/SeguidorModel";
+import { SeguidorModel } from "../../models/SeguidorModel";
 import { validarTokenJWT } from "../../middlewares/validarTokenJWT";
 import { UsuarioModel } from "../../models/UsuarioModel";
 import { RespostaPadraoMsg } from "../../types/RespostaPadraoMsg";
