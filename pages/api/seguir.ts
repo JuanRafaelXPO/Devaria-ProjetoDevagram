@@ -63,4 +63,4 @@ const seguirEndpoint
     }
 }
 
-export default politicaCORS(conectarMongoDB(seguirEndpoint));
+export default politicaCORS(validarTokenJWT(conectarMongoDB(seguirEndpoint)));
