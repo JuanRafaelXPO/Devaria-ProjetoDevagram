@@ -59,4 +59,4 @@ export const config = {
     }
 }
 
-export default politicaCORS(conectarMongoDB(handler));
+export default politicaCORS(validarTokenJWT(conectarMongoDB(handler)));
