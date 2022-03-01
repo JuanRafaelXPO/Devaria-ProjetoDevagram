@@ -19,8 +19,11 @@ const handler = nc()
             }
 
             const {nome} = req.body;
-            if(nome && nome.length > 2){
+            const max_caracteres = 3;
+            if(nome && nome.length > max_caracteres){
                 usuario.nome = nome;
+            }else{
+                return res.status(400).json({erro : `O número de caracteres deve ser superior a ${max_caracteres}`})
             }
 
             const {file} = req;
@@ -37,7 +40,7 @@ const handler = nc()
             
         }catch(e){
             console.log(e);
-            res.status(400).json({erro : 'Não foi possível atualizar o usuário' + e})
+            return res.status(400).json({erro : 'Não foi possível atualizar o usuário' + e});
         }
     })
     .get(async (req : NextApiRequest, res : NextApiResponse<RespostaPadraoMsg | any>) => {
