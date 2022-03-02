@@ -6,6 +6,7 @@ import { UsuarioModel } from "../../models/UsuarioModel";
 import nc from "next-connect";
 import { upload, uploadImagemCosmic } from "../../services/uploadImagemCosmic";
 import { politicaCORS } from "../../middlewares/politcaCORS";
+import md5 from "md5";
 
 const handler = nc()
     .use(upload.single('file'))
@@ -18,20 +19,42 @@ const handler = nc()
                 return res.status(400).json({erro : 'Usuário não encontrado'})
             }
 
+            // Trocar nick de usuário
             const {nome} = req.body;
-            const max_caracteres = 3;
-            if(nome && nome.length > max_caracteres){
+            const max_caracteres = 4;
+            if(nome){
+                if(nome.length < max_caracteres){
+                    return res.status(400).json({erro : `O nome deve ter no mínimo ${max_caracteres} caracteres`})
+                }
                 usuario.nome = nome;
-            }else{
-                return res.status(400).json({erro : `O número de caracteres deve ser superior a ${max_caracteres}`})
             }
 
+            // Trocar senha do usuário
+            const {novaSenha} = req.body;
+            if(novaSenha){
+                if(novaSenha.length < 4){
+                    return res.status(400).json({erro : 'A senha deve ter no mínimo 4 caracteres'})
+                }
+                usuario.senha = md5(novaSenha);
+            }
+            
+
+            // Trocar avatar do usuário
             const {file} = req;
             if(file && file.originalname){
                 const image = await uploadImagemCosmic(req);
                 if(image && image.media && image.media.url){
                     usuario.avatar = image.media.url;
                 }
+            }
+
+            // Trocar email do usuário
+            const {email} = req.body;
+            if(email && email.length >= 5){
+                if(!email.includes('@') || !email.includes('.') || email.includes(' ')){
+                    return res.status(400).json({erro : 'Email invalido'});
+                }
+                usuario.email = email;
             }
             
             await UsuarioModel.findByIdAndUpdate({_id : usuario._id}, usuario);
